@@ -2,7 +2,7 @@
 //require external libraries
 let express = require("express");
 let bodyParser = require("body-parser");
-let cors = require("cors")
+// let cors = require("cors")
 let { ObjectID } = require("mongodb");
 
 //require local imports
