@@ -10,12 +10,30 @@ const { User } = require("../models/user");
 const { Annotation } = require("../models/annotation");
 const { Artwork } = require("../models/artwork");
 
-beforeEach((done) => {
-  User.remove({})
-    .then(() => done()); //wipe all Users for testing
-});
+// beforeEach((done) => {
+//   User.remove({})
+//     .then(() => done()); //wipe all Users for testing
+// });
 
 describe("POST /users", () => {
+
+  it("should not create a todo with invalid body data", (done) => {
+    request(app)
+      .post("/users")
+      .send({})
+      .expect(400)
+      .end((error, response) => {
+        if (error) {
+          return done(error);
+        }
+
+        User.find().then((users) => {
+          expect(users.length).toBe(0);
+          done();
+        }).catch((error) => done(error));
+      });
+  });
+
   it("should create a new user", (done) => {
     let username = "testUsername";
     let password = "testPassword";
@@ -34,20 +52,31 @@ describe("POST /users", () => {
         }
 
         User.find().then((users) => {
-          expect(users.length).toBe(1);
+          expect(users.length).toBe(2);
           expect(users[0].username).toBe(username);
           expect(users[0].password).toBe(password);
           done();
         }).catch((error) => done(error));
 
 
-      })
-  })
-})
+      });
+  });
 
 
-//
-//
+});
+
+// describe("GET /users", () => {
+//   it("should get all users", (done) => {
+//     request(app)
+//       .get("/users")
+//       .expect(200)
+//       .expect((response) => {
+//         console.log("Users length", response.body.users.length)
+//         expect(response.body.users.length).toBe(2);
+//       })
+//       .end(done);
+//   });
+// });
 
 
 

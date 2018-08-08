@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 //establish schema
 const UserSchema = new Schema({
-  username: String,
-  password: { type: String, default: "default" },
+  username: { type: String, required: true },
+  password: { type: String, required: true },
 });
 
 //Create model. First argument is singlular name for collection.
