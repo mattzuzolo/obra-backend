@@ -7,7 +7,7 @@ const ArtworkSchema = new Schema({
   artist: String,
   medium: String,
   century: String,
-  culture: { type: String, default: "Spanish" },
+  culture: type: String,
   url: String,
   imageUrl: String,
   apiId: Number,

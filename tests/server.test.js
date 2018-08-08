@@ -122,8 +122,8 @@ let seedUsers = [{
 
 
 //LOCAL TESTS
-
-//Seeds to test models/schema/relationship
+//
+// Seeds to test models/schema/relationship
 // const seedUser = [{
 //     _id: new ObjectID(),
 //     name: "Matt",
@@ -211,7 +211,7 @@ let seedUsers = [{
 //     user: seedUser[3],
 //     artwork: seedArtwork[0],
 //   }];
-//mocha tests
+// mocha tests
 // xdescribe("Seeding Users", () => {
 //
 //   it("should create a new instance of person with a name and password", function() {
