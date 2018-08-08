@@ -29,7 +29,7 @@ app.post("/users", (request, response) => {
     username: request.body.username,
     password: request.body.password,
   })
-
+  //save to DB or deny entry
   user.save().then((doc) => {
     response.send(doc);
   }, (error) => {
@@ -39,12 +39,32 @@ app.post("/users", (request, response) => {
 
 //GET Users
 app.get("/users", (request, response) => {
+  //use find method to access all users
   User.find({}).then((users) => {
     response.send({users});
   }, (error) => {
     response.status(400).send(error);
   });
-})
+});
+
+app.get("/users/:id", (request, response) => {
+  let id = request.params.id;
+
+  if (!ObjectID.isValid(id)){
+    return response.status(404).send();
+  }
+
+  User.findById(id).then((user) => {
+    if(!user){
+      return response.status(404).send();
+    }
+
+    response.send({user});
+  }).catch((error) => {
+    response.status(400).send();
+  });
+
+});
 
 
 
