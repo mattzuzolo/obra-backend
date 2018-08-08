@@ -23,19 +23,6 @@ app.use(cors())
 
 
 //Configure routes here:
-app.post("/users", (request, response) => {
-
-  let user = new User({
-    username: request.body.username,
-    password: request.body.password,
-  })
-  //save to DB or deny entry
-  user.save().then((doc) => {
-    response.send(doc);
-  }, (error) => {
-    response.status(400).send(error);
-  });
-});
 
 //GET Users
 app.get("/users", (request, response) => {
@@ -46,7 +33,6 @@ app.get("/users", (request, response) => {
     response.status(400).send(error);
   });
 });
-
 app.get("/users/:id", (request, response) => {
   let id = request.params.id;
 
@@ -65,9 +51,50 @@ app.get("/users/:id", (request, response) => {
   });
 });
 
+//POST Users
+app.post("/users", (request, response) => {
+  let user = new User({
+    username: request.body.username,
+    password: request.body.password,
+  })
+  //save to DB or deny entry
+  user.save().then((doc) => {
+    response.send(doc);
+  }, (error) => {
+    response.status(400).send(error);
+  });
+});
 
 
-//ARTWORK
+//GET Artwork
+app.get("/artwork", (request, response) => {
+  //use find method to access all users
+  Artwork.find({}).then((artwork) => {
+    response.send({artwork});
+  }, (error) => {
+    response.status(400).send(error);
+  });
+});
+app.get("/artwork/:id", (request, response) => {
+  let id = request.params.id;
+
+  if (!ObjectID.isValid(id)){
+    return response.status(404).send();
+  }
+
+  Artwork.findById(id).then((artwork) => {
+    if(!artwork){
+      return response.status(404).send();
+    }
+
+    response.send({artwork});
+  }).catch((error) => {
+    response.status(400).send();
+  });
+
+});
+
+//POST Artwork
 app.post("/artwork", (request, response) => {
 
   let artwork = new Artwork({
@@ -88,34 +115,8 @@ app.post("/artwork", (request, response) => {
   });
 });
 
-app.get("/artwork", (request, response) => {
-  //use find method to access all users
-  Artwork.find({}).then((artwork) => {
-    response.send({artwork});
-  }, (error) => {
-    response.status(400).send(error);
-  });
-});
 
 
-app.get("/artwork/:id", (request, response) => {
-  let id = request.params.id;
-
-  if (!ObjectID.isValid(id)){
-    return response.status(404).send();
-  }
-
-  Artwork.findById(id).then((artwork) => {
-    if(!artwork){
-      return response.status(404).send();
-    }
-
-    response.send({artwork});
-  }).catch((error) => {
-    response.status(400).send();
-  });
-
-});
 
 
 //Listen on the chosen port
