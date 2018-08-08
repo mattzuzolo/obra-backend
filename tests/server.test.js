@@ -10,60 +10,69 @@ const { User } = require("../models/user");
 const { Annotation } = require("../models/annotation");
 const { Artwork } = require("../models/artwork");
 
+let seedUsers = [{
+    _id: new ObjectID,
+    username: "firstUser",
+    password: "firstPassword"
+  },
+  {
+    _id: new ObjectID,
+    username: "secondUser",
+    password: "secondPassword"
+  }];
+
 // beforeEach((done) => {
 //   User.remove({})
 //     .then(() => done()); //wipe all Users for testing
 // });
 
-describe("POST /users", () => {
-
-  it("should not create a todo with invalid body data", (done) => {
-    request(app)
-      .post("/users")
-      .send({})
-      .expect(400)
-      .end((error, response) => {
-        if (error) {
-          return done(error);
-        }
-
-        User.find().then((users) => {
-          expect(users.length).toBe(0);
-          done();
-        }).catch((error) => done(error));
-      });
-  });
-
-  it("should create a new user", (done) => {
-    let username = "testUsername";
-    let password = "testPassword";
-
-    request(app)
-      .post("/users")
-      .send({ username, password })
-      .expect(200)
-      .expect((response) => {
-        expect(response.body.username).toBe(username);
-        expect(response.body.password).toBe(password);
-      })
-      .end((error, response) => {
-        if (error){
-          return done(error);
-        }
-
-        User.find().then((users) => {
-          expect(users.length).toBe(2);
-          expect(users[0].username).toBe(username);
-          expect(users[0].password).toBe(password);
-          done();
-        }).catch((error) => done(error));
-
-
-      });
-  });
-
-
-});
+// describe("POST /users", () => {
+//
+//   it("should not create a todo with invalid body data", (done) => {
+//     request(app)
+//       .post("/users")
+//       .send({})
+//       .expect(400)
+//       .end((error, response) => {
+//         if (error) {
+//           return done(error);
+//         }
+//
+//         User.find().then((users) => {
+//           expect(users.length).toBe(0);
+//           done();
+//         }).catch((error) => done(error));
+//       });
+//   });
+//
+//   it("should create a new user", (done) => {
+//     let username = "testUsername";
+//     let password = "testPassword";
+//
+//     request(app)
+//       .post("/users")
+//       .send({ username, password })
+//       .expect(200)
+//       .expect((response) => {
+//         expect(response.body.username).toBe(username);
+//         expect(response.body.password).toBe(password);
+//       })
+//       .end((error, response) => {
+//         if (error){
+//           return done(error);
+//         }
+//
+//         User.find().then((users) => {
+//           expect(users.length).toBe(2);
+//           expect(users[0].username).toBe(username);
+//           expect(users[0].password).toBe(password);
+//           done();
+//         }).catch((error) => done(error));
+//
+//
+//       });
+//   });
+// });
 
 // describe("GET /users", () => {
 //   it("should get all users", (done) => {
@@ -77,6 +86,36 @@ describe("POST /users", () => {
 //       .end(done);
 //   });
 // });
+
+// describe("GET /users/:id", () => {
+//   it("should return an individual user instance", (done) => {
+//     request(app)
+//       .get(`/users/5b6b5031a7d0e837d745274d`)
+//       .expect(200)
+//       .expect((response) => {
+//         expect(response.body.user.text).toBe(seedUsers[0].text);
+//       })
+//       .end(done)
+//   })
+//
+//
+//   it("Should get an individual user by id", (done) => {
+//     let hexId = new ObjectID().toHexString();
+//
+//     request(app)
+//       .get(`/users/${hexId}`)
+//       .expect(404)
+//       .end(done);
+//   });
+//
+//   it("Should return 404 for non-object ids", (done) => {
+//     request(app)
+//       .get("/todos/badparam")
+//       .expect(404)
+//       .end(done);
+//   });
+// })
+
 
 
 
