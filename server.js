@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 4000;
 
 //configure middleware:
 app.use(bodyParser.json());
-app.use(cors())
+// app.use(cors());
 
 
 //Configure routes here:
