@@ -33,37 +33,37 @@ app.get("/users", (request, response) => {
     response.status(400).send(error);
   });
 });
-app.get("/users/:id", (request, response) => {
-  let id = request.params.id;
-
-  if (!ObjectID.isValid(id)){
-    return response.status(404).send();
-  }
-
-  User.findById(id).then((user) => {
-    if(!user){
-      return response.status(404).send();
-    }
-
-    response.send({user});
-  }).catch((error) => {
-    response.status(400).send();
-  });
-});
+// app.get("/users/:id", (request, response) => {
+//   let id = request.params.id;
+//
+//   if (!ObjectID.isValid(id)){
+//     return response.status(404).send();
+//   }
+//
+//   User.findById(id).then((user) => {
+//     if(!user){
+//       return response.status(404).send();
+//     }
+//
+//     response.send({user});
+//   }).catch((error) => {
+//     response.status(400).send();
+//   });
+// });
 
 //POST Users
-app.post("/users", (request, response) => {
-  let user = new User({
-    username: request.body.username,
-    password: request.body.password,
-  })
-  //save to DB or deny entry
-  user.save().then((doc) => {
-    response.send(doc);
-  }, (error) => {
-    response.status(400).send(error);
-  });
-});
+// app.post("/users", (request, response) => {
+//   let user = new User({
+//     username: request.body.username,
+//     password: request.body.password,
+//   })
+//   //save to DB or deny entry
+//   user.save().then((doc) => {
+//     response.send(doc);
+//   }, (error) => {
+//     response.status(400).send(error);
+//   });
+// });
 
 
 //GET Artwork
@@ -75,45 +75,45 @@ app.get("/artwork", (request, response) => {
     response.status(400).send(error);
   });
 });
-app.get("/artwork/:id", (request, response) => {
-  let id = request.params.id;
-
-  if (!ObjectID.isValid(id)){
-    return response.status(404).send();
-  }
-
-  Artwork.findById(id).then((artwork) => {
-    if(!artwork){
-      return response.status(404).send();
-    }
-
-    response.send({artwork});
-  }).catch((error) => {
-    response.status(400).send();
-  });
-
-});
+// app.get("/artwork/:id", (request, response) => {
+//   let id = request.params.id;
+//
+//   if (!ObjectID.isValid(id)){
+//     return response.status(404).send();
+//   }
+//
+//   Artwork.findById(id).then((artwork) => {
+//     if(!artwork){
+//       return response.status(404).send();
+//     }
+//
+//     response.send({artwork});
+//   }).catch((error) => {
+//     response.status(400).send();
+//   });
+//
+// });
 
 //POST Artwork
-app.post("/artwork", (request, response) => {
-
-  let artwork = new Artwork({
-    title: request.body.title,
-    artist: request.body.artist,
-    medium: request.body.medium,
-    century: request.body.century,
-    culture: request.body.culture,
-    url: request.body.url,
-    imageUrl: request.body.imageUrl,
-    apiId: request.body.apiId,
-  });
-  //save to DB or deny entry
-  artwork.save().then((doc) => {
-    response.send(doc);
-  }, (error) => {
-    response.status(400).send(error);
-  });
-});
+// app.post("/artwork", (request, response) => {
+//
+//   let artwork = new Artwork({
+//     title: request.body.title,
+//     artist: request.body.artist,
+//     medium: request.body.medium,
+//     century: request.body.century,
+//     culture: request.body.culture,
+//     url: request.body.url,
+//     imageUrl: request.body.imageUrl,
+//     apiId: request.body.apiId,
+//   });
+//   //save to DB or deny entry
+//   artwork.save().then((doc) => {
+//     response.send(doc);
+//   }, (error) => {
+//     response.status(400).send(error);
+//   });
+// });
 
 
 
