@@ -16,4 +16,4 @@ const ArtworkSchema = new Schema({
 //Create model. First argument is singlular name for collection.
 const Artwork = mongoose.model("artwork", ArtworkSchema);
 
-module.exports = ArtworkSchema;
+module.exports = { Artwork };
