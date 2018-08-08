@@ -68,6 +68,39 @@ app.get("/users/:id", (request, response) => {
 
 
 
+//ARTWORK
+app.post("/artwork", (request, response) => {
+
+  let artwork = new Artwork({
+    title: request.body.title,
+    artist: request.body.artist,
+    medium: request.body.medium,
+    century: request.body.century,
+    culture: request.body.culture,
+    url: request.body.url,
+    imageUrl: request.body.imageUrl,
+    apiId: request.body.apiId,
+  });
+  //save to DB or deny entry
+  artwork.save().then((doc) => {
+    response.send(doc);
+  }, (error) => {
+    response.status(400).send(error);
+  });
+});
+
+app.get("/artwork", (request, response) => {
+  //use find method to access all users
+  Artwork.find({}).then((artwork) => {
+    response.send({artwork});
+  }, (error) => {
+    response.status(400).send(error);
+  });
+});
+
+
+
+
 //Listen on the chosen port
 app.listen(PORT, () => {
   console.log(`Started on port ${PORT}.`);
