@@ -63,7 +63,6 @@ app.get("/users/:id", (request, response) => {
   }).catch((error) => {
     response.status(400).send();
   });
-
 });
 
 
@@ -99,6 +98,24 @@ app.get("/artwork", (request, response) => {
 });
 
 
+app.get("/artwork/:id", (request, response) => {
+  let id = request.params.id;
+
+  if (!ObjectID.isValid(id)){
+    return response.status(404).send();
+  }
+
+  Artwork.findById(id).then((artwork) => {
+    if(!artwork){
+      return response.status(404).send();
+    }
+
+    response.send({artwork});
+  }).catch((error) => {
+    response.status(400).send();
+  });
+
+});
 
 
 //Listen on the chosen port
