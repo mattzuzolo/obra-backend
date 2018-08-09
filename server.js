@@ -65,7 +65,6 @@ app.post("/users", (request, response) => {
   });
 });
 
-
 //GET Artwork
 app.get("/artwork", (request, response) => {
   //use find method to access all users
@@ -75,6 +74,7 @@ app.get("/artwork", (request, response) => {
     response.status(400).send(error);
   });
 });
+
 app.get("/artwork/:id", (request, response) => {
   let id = request.params.id;
 
@@ -96,7 +96,6 @@ app.get("/artwork/:id", (request, response) => {
 
 //POST Artwork
 app.post("/artwork", (request, response) => {
-
   let artwork = new Artwork({
     title: request.body.title,
     artist: request.body.artist,
@@ -115,6 +114,48 @@ app.post("/artwork", (request, response) => {
   });
 });
 
+//GET annotations
+app.get("/annotations", (request, response) => {
+  //use find method to access all users
+  Annotation.find({}).then((annotations) => {
+    response.send({annotations});
+  }, (error) => {
+    response.status(400).send(error);
+  });
+});
+
+//GET by id
+app.get("/annotations/:id", (request, response) => {
+  let id = request.params.id;
+  if (!ObjectID.isValid(id)){
+    return response.status(404).send();
+  }
+  Artwork.findById(id).then((annotation) => {
+    if(!annotation){
+      return response.status(404).send();
+    }
+    response.send({annotation});
+  }).catch((error) => {
+    response.status(400).send();
+  });
+});
+
+
+//POST annotation
+app.post("/annotations", (request, response) => {
+  let annotation = new Annotation({
+    headline: request.body.headline,
+    content: request.body.content,
+    source: request.body.source,
+
+  });
+
+  annotation.save().then((doc) => {
+    response.send(doc);
+  }, (error) => {
+    response.status(400).send(error);
+  });
+});
 
 
 

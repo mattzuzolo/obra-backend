@@ -8,7 +8,7 @@ const ArtworkSchema = require("./artwork");
 //establish schema
 const AnnotationSchema = new Schema({
   headline: String,
-  body: String,
+  content: String,
   source: String,
   user: [{type: Schema.Types.ObjectId, ref: 'user'}], //must reference entire collection
   artwork: [{type: Schema.Types.ObjectId, ref: 'artwork'}],
