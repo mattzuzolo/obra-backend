@@ -33,6 +33,8 @@ app.get("/users", (request, response) => {
     response.status(400).send(error);
   });
 });
+
+//GET users by id
 app.get("/users/:id", (request, response) => {
   let id = request.params.id;
 
@@ -127,10 +129,12 @@ app.get("/annotations", (request, response) => {
 //GET by id
 app.get("/annotations/:id", (request, response) => {
   let id = request.params.id;
+
   if (!ObjectID.isValid(id)){
     return response.status(404).send();
   }
-  Artwork.findById(id).then((annotation) => {
+
+  Annotation.findById(id).then((annotation) => {
     if(!annotation){
       return response.status(404).send();
     }
