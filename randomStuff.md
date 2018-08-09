@@ -2,8 +2,6 @@
   "headline": "Pedestrian at Best.",
   "body": "I could totally paint this. Why is it in a museum?",
   "source": "https://www.yahoo.com",
-  "user": seedUser[0],
-  "artwork": seedArtwork[0]
 }
 
 

@@ -81,43 +81,116 @@ const seedAnnotation = [{
     artwork: seedArtwork[0],
   }];
 
-  Promise.all([
-      User.create(seedUser),
-      Artwork.create(seedArtwork)
-  ]).then(([users, artwork]) => {
-      let annotations = [
-          {
-            headline: 'Pedestrian at Best.',
-            content: "I could totally paint this. Why is it in a museum?",
-            source: "https://www.yahoo.com",
-            user: users[0],
-            artwork: artwork[0]
-          },
-          {
-            headline: 'Pretty meh',
-            content: "It could be better. I prefer Banksy. That's real art.",
-            source: "https://en.wikipedia.org/wiki/Banksy",
-            user: users[1],
-            artwork: artwork[0]
-          },
-          {
-            headline: 'lame.',
-            content: "I HAVE THE BEST PAINTINGS.",
-            source: "https://www.wikipedia.org/",
-            user: users[3],
-            artwork: artwork[2]
-          },
-          {
-            headline: 'One of his best works',
-            content: "Love it.",
-            source: "https://nodejs.org/en/",
-            user: users[3],
-            artwork: artwork[1]
-          },
 
-      ];
-      return Annotation.create(annotations);
-  });
+let queryArray = [];
+queryArray.push(User.create([{
+    username: "Matt",
+    password: "the best password ever",
+  }]));
+queryArray.push(Artwork.create([{
+    title: "The Farm",
+    artist: "Joan Miró",
+    medium: "Oil on cavnas",
+    century: "20th Century",
+    culture: "Spanish",
+    url: "https://www.nga.gov/collection/art-object-page.69660.html",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/3/33/TheFarmMiro21to22.jpg/300px-TheFarmMiro21to22.jpg",
+    apiId: "134",
+  }]));
+
+Promise.all(queryArray).then(([Users, Artworks]) => {
+const annotations = [
+  {
+    headline: 'Pedestrian at Best.',
+    content: "I could totally paint this. Why is it in a museum?",
+    source: "https://www.yahoo.com",
+    user: Users[0],
+    artwork: Artworks[0]
+  }
+];
+return Annotation.create(annotations);
+}).catch(Error => {
+   console.log("Error: ", Error);
+})
+
+
+
+
+
+
+Promise.all([
+    User.create([{
+        username: "Matt",
+        password: "the best password ever",
+      }]),
+    Artwork.create([{
+        title: "The Farm",
+        artist: "Joan Miró",
+        medium: "Oil on cavnas",
+        century: "20th Century",
+        culture: "Spanish",
+        url: "https://www.nga.gov/collection/art-object-page.69660.html",
+        imageUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/3/33/TheFarmMiro21to22.jpg/300px-TheFarmMiro21to22.jpg",
+        apiId: "134",
+      }])
+]).then(([users, artworks]) => {
+    const annotations = [
+      {
+        headline: 'Pedestrian at Best.',
+        content: "I could totally paint this. Why is it in a museum?",
+        source: "https://www.yahoo.com",
+        user: users[0],
+        artwork: artwork[0]
+      }
+    ];
+    return Annotation.create(annotations);
+})
+
+
+
+
+
+//
+// Promise.all([
+//     User.create(seedUser),
+//     Artwork.create(seedArtwork)
+// ])
+// .then(([users, artwork]) => {
+    // let annotations = [
+    //     {
+    //       headline: 'Pedestrian at Best.',
+    //       content: "I could totally paint this. Why is it in a museum?",
+    //       source: "https://www.yahoo.com",
+    //       user: users[0],
+    //       artwork: artwork[0]
+    //     },
+//         {
+//           headline: 'Pretty meh',
+//           content: "It could be better. I prefer Banksy. That's real art.",
+//           source: "https://en.wikipedia.org/wiki/Banksy",
+//           user: users[1],
+//           artwork: artwork[0]
+//         },
+//         {
+//           headline: 'lame.',
+//           content: "I HAVE THE BEST PAINTINGS.",
+//           source: "https://www.wikipedia.org/",
+//           user: users[3],
+//           artwork: artwork[2]
+//         },
+//         {
+//           headline: 'One of his best works',
+//           content: "Love it.",
+//           source: "https://nodejs.org/en/",
+//           user: users[3],
+//           artwork: artwork[1]
+//         },
+//
+//     ];
+//     return Annotation.create(annotations);
+// }).then(console.log)
+//
+
 
 
 //

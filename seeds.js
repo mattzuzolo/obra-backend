@@ -112,40 +112,60 @@ function postUser(usersUrl,obj) {
 for (let i = 0; i < seedUser.length; i++){
   postUser(usersUrl, seedUser[i])
     .then(res => res.json())
-    .then(data => seedAnnotation(data));
+    .then(console.log)
 }
 
 ////////////
 
+const annotationUrl = "https://agile-anchorage-40481.herokuapp.com/annotations"
 
 const seedAnnotation = [{
     headline: "Pedestrian at Best.",
-    body: "I could totally paint this. Why is it in a museum?",
+    content: "I could totally paint this. Why is it in a museum?",
     source: "https://www.yahoo.com",
-    user: seedUser[0],
-    artwork: seedArtwork[0],
+    // user: seedUser[0],
+    // artwork: seedArtwork[0],
   },{
     headline: "Pretty meh",
-    body: "It could be better. I prefer Banksy. That's real art.",
+    content: "It could be better. I prefer Banksy. That's real art.",
     source: "https://en.wikipedia.org/wiki/Banksy",
-    user: seedUser[0],
-    artwork: seedArtwork[1],
+    // user: seedUser[0],
+    // artwork: seedArtwork[1],
   },{
     headline: "lame.",
-    body: "I HAVE THE BEST SOURCES.",
+    content: "I HAVE THE BEST SOURCES.",
     source: "https://www.wikipedia.org/",
-    user: seedUser[2],
-    artwork: seedArtwork[2],
+    // user: seedUser[2],
+    // artwork: seedArtwork[2],
   },{
     headline: "One of his best works",
-    body: "Love it.",
+    content: "Love it.",
     source: "https://nodejs.org/en/",
-    user: seedUser[3],
-    artwork: seedArtwork[0],
+    // user: seedUser[3],
+    // artwork: seedArtwork[0],
   }];
 
-setTimeout(function () {
+  function postAnnotation(annotationUrl,obj) {
 
+    let content = {
+      headline: obj.headline,
+      content: obj.content,
+      source: obj.source,
+    }
 
+   const postConfig = {
+     Accept: "application/json",
+     method: "POST",
+     headers: {
+       "Content-type": "application/json"
+     },
+     body: JSON.stringify(body)
+   };
+   return fetch(annotationUrl, postConfig)
+  }
 
-}, 2500)
+  for (let i = 0; i < seedAnnotation.length; i++){
+    postUser(annotationUrl, seedAnnotation[i])
+      .then(res => res.json())
+      .then(console.log)
+  }
