@@ -194,12 +194,9 @@ app.delete("/annotations/:id", (request, response) => {
   }
 
   Annotation.findByIdAndRemove(id).then((annotation) => {
-
-
     if (!annotation){
       return response.status(404).send();
     }
-
     response.send(annotation);
   }).catch((error) => {
     response.status(400).send();
