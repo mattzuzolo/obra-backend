@@ -160,6 +160,42 @@ app.post("/annotations", (request, response) => {
   });
 });
 
+//UPDATE annotation
+app.put("/annotations/:id", (request, response) => {
+  let id = request.params.id;
+
+  //only allow user to pass specified keys
+  // let body = (({ headline, content, source}) => ({ headline, content, source }))(request.body);
+  let body = request.body;
+
+  if (!ObjectID.isValid(id)){
+    return response.status(404).send();
+  }
+
+  Annotation.findByIdAndUpdate(id, body, {new: true})
+    .then((annotation) => {
+      if (!annotation) {
+        return response.status(404).send();
+      }
+      respose.send({annotation})
+
+    }).catch((error) => {
+      response.send(400).send();
+    })
+})
+
+//Works without promises.
+// app.put("/annotations/:id", (request, response) => {
+//   let id = request.params.id;
+//
+//   Annotation.findByIdAndUpdate(request.params.id, request.body, {new: true}, (error, annotation) => {
+//     if (error) {
+//       return response.status(400).send("Could not update annotation.");
+//     }
+//     response.status(200).send(annotation)
+//   });
+// });
+
 
 //Listen on the chosen port
 app.listen(PORT, () => {
