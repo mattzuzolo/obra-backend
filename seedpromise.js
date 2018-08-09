@@ -31,7 +31,9 @@ Promise.all([
   artworkExample.save(),
 ]).then(([user, artwork]) => {
   let annotationExample = new Annotation({
-    headline: "Matt's annotation BUT NEW NAME",
+    headline: "SEED HEADLINE2",
+    content: "SEED CONTENT2",
+    source: "SEED SOURCE2",
     user: [userExample],
     artwork: [artworkExample],
   });

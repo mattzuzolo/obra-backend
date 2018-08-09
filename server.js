@@ -172,29 +172,19 @@ app.put("/annotations/:id", (request, response) => {
     return response.status(404).send();
   }
 
-  Annotation.findByIdAndUpdate(id, body, {new: true})
+  Annotation.findByIdAndUpdate(id, request.body, {new: true})
     .then((annotation) => {
       if (!annotation) {
+        console.log("Annotation doesn't exist")
         return response.status(404).send();
       }
-      respose.send({annotation})
+      response.send({annotation})
 
     }).catch((error) => {
       response.send(400).send();
     })
 })
 
-//Works without promises.
-// app.put("/annotations/:id", (request, response) => {
-//   let id = request.params.id;
-//
-//   Annotation.findByIdAndUpdate(request.params.id, request.body, {new: true}, (error, annotation) => {
-//     if (error) {
-//       return response.status(400).send("Could not update annotation.");
-//     }
-//     response.status(200).send(annotation)
-//   });
-// });
 
 
 //Listen on the chosen port
