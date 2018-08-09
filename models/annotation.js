@@ -10,7 +10,7 @@ const AnnotationSchema = new Schema({
   headline: String,
   content: String,
   source: String,
-  user: [{type: Schema.Types.ObjectId, ref: 'user'}], //must reference entire collection
+  user: [{type: Schema.Types.ObjectId, ref: 'user'}], //must reference entire collection as listed in respective schema
   artwork: [{type: Schema.Types.ObjectId, ref: 'artwork'}],
 });
 

@@ -10,16 +10,16 @@ const { User } = require("../models/user");
 const { Annotation } = require("../models/annotation");
 const { Artwork } = require("../models/artwork");
 
-let seedUsers = [{
-    _id: new ObjectID,
-    username: "firstUser",
-    password: "firstPassword"
-  },
-  {
-    _id: new ObjectID,
-    username: "secondUser",
-    password: "secondPassword"
-  }];
+// let seedUsers = [{
+//     _id: new ObjectID,
+//     username: "firstUser",
+//     password: "firstPassword"
+//   },
+//   {
+//     _id: new ObjectID,
+//     username: "secondUser",
+//     password: "secondPassword"
+//   }];
 
 // beforeEach((done) => {
 //   User.remove({})

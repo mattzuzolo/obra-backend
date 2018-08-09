@@ -33,7 +33,6 @@ app.get("/users", (request, response) => {
     response.status(400).send(error);
   });
 });
-
 //GET users by id
 app.get("/users/:id", (request, response) => {
   let id = request.params.id;
@@ -52,7 +51,6 @@ app.get("/users/:id", (request, response) => {
     response.status(400).send();
   });
 });
-
 //POST Users
 app.post("/users", (request, response) => {
   let user = new User({
@@ -67,6 +65,7 @@ app.post("/users", (request, response) => {
   });
 });
 
+
 //GET Artwork
 app.get("/artwork", (request, response) => {
   //use find method to access all users
@@ -76,7 +75,7 @@ app.get("/artwork", (request, response) => {
     response.status(400).send(error);
   });
 });
-
+//Get Artwork by id
 app.get("/artwork/:id", (request, response) => {
   let id = request.params.id;
 
@@ -116,6 +115,7 @@ app.post("/artwork", (request, response) => {
   });
 });
 
+
 //GET annotations
 app.get("/annotations", (request, response) => {
   //use find method to access all users
@@ -126,7 +126,7 @@ app.get("/annotations", (request, response) => {
   });
 });
 
-//GET by id
+//GET annotations by id
 app.get("/annotations/:id", (request, response) => {
   let id = request.params.id;
 
@@ -144,7 +144,6 @@ app.get("/annotations/:id", (request, response) => {
   });
 });
 
-
 //POST annotation
 app.post("/annotations", (request, response) => {
   let annotation = new Annotation({
@@ -160,8 +159,6 @@ app.post("/annotations", (request, response) => {
     response.status(400).send(error);
   });
 });
-
-
 
 
 //Listen on the chosen port
