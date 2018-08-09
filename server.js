@@ -183,8 +183,28 @@ app.put("/annotations/:id", (request, response) => {
     }).catch((error) => {
       response.send(400).send();
     })
-})
+});
 
+//DELETE annotation
+app.delete("/annotations/:id", (request, response) => {
+  let id = request.params.id;
+
+  if (!ObjectID.isValid(id)){
+    return response.status(404).send();
+  }
+
+  Annotation.findByIdAndRemove(id).then((annotation) => {
+
+
+    if (!annotation){
+      return response.status(404).send();
+    }
+
+    response.send(annotation);
+  }).catch((error) => {
+    response.status(400).send();
+  });
+});
 
 
 //Listen on the chosen port
