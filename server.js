@@ -152,6 +152,7 @@ app.post("/annotations", (request, response) => {
     source: request.body.source,
     xCoord: request.body.xCoord,
     yCoord: request.body.yCoord,
+    artwork: request.body.artwork,
   });
 
   annotation.save().then((doc) => {
