@@ -146,6 +146,7 @@ app.get("/annotations/:id", (request, response) => {
 
 //POST annotation
 app.post("/annotations", (request, response) => {
+  console.log("Request at /annotations POST: ", request.body);
   let annotation = new Annotation({
     headline: request.body.headline,
     content: request.body.content,
@@ -153,10 +154,13 @@ app.post("/annotations", (request, response) => {
     xCoord: request.body.xCoord,
     yCoord: request.body.yCoord,
     artwork: request.body.artwork,
+    user: request.body.user,
   });
+  console.log("Request at /annotations POST: ", request.body);
+  console.log(request.body);
 
   annotation.save().then((doc) => {
-    console.log("Doc has saved: ", doc)
+    // console.log("Doc has saved: ", doc)
     response.send(doc);
   }, (error) => {
     response.status(400).send(error);
