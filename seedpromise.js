@@ -16,7 +16,7 @@ let userExample = new User({
 });
 
 let artworkExample = new Artwork({
-  title: "Nighthawks BUT UNIQUE NAME",
+  title: "Nighthawks",
   artist: "Edward Hopper",
   medium: "Oil on canvas",
   century: "20th Cenutry",
