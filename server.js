@@ -150,7 +150,8 @@ app.post("/annotations", (request, response) => {
     headline: request.body.headline,
     content: request.body.content,
     source: request.body.source,
-
+    xCoord: request.body.xCoord,
+    yCoord: request.body.yCoord,
   });
 
   annotation.save().then((doc) => {
