@@ -154,6 +154,7 @@ app.post("/annotations", (request, response) => {
   });
 
   annotation.save().then((doc) => {
+    console.log("Doc has saved: ", doc)
     response.send(doc);
   }, (error) => {
     response.status(400).send(error);

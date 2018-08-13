@@ -34,6 +34,8 @@ Promise.all([
     headline: "SEED HEADLINE2",
     content: "SEED CONTENT2",
     source: "SEED SOURCE2",
+    xCoord: 115.96590995788574,
+    yCoord: 360.875,
     user: [userExample],
     artwork: [artworkExample],
   });
