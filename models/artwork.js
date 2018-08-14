@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+// const findOrCreate = require('mongoose-find-or-create')
 
 //establish schema
 const ArtworkSchema = new Schema({
@@ -10,10 +11,12 @@ const ArtworkSchema = new Schema({
   culture: String,
   url: String,
   imageUrl: String,
-  apiId: Number,
+  apiId: {
+    type: String,
+    unique: true
+  }
 });
 
-//Create model. First argument is singlular name for collection.
 const Artwork = mongoose.model("artwork", ArtworkSchema);
 
 module.exports = { Artwork };
