@@ -110,33 +110,13 @@ app.post("/artwork", (request, response) => {
 
 
 
-  // Artwork.findOne({ apiId: artwork.apiId })
-  //   .then(foundArtwork => {
-  //     if (!foundArtwork){
-  //       return artwork.save().then((doc) => {
-  //         response.send(doc);
-  //       }, (error) => {
-  //         response.status(400).send(error);
-  //       });
-  //     }
-  //     return foundArtwork;
-  //   })
-  //   .catch(console.error);
-
-
-    //trying find or create
-    // Artwork.findOneOrCreate(artwork).then((doc) => {
-    //   response.send(doc);
-    // }, (error) => {
-    //   response.status(400).send(error);
-    // });
-
-    //save to DB or deny entry
-    artwork.save().then((doc) => {
-      response.send(doc);
-    }, (error) => {
-      response.status(400).send(error);
-    });
+  //save to DB or deny entry
+  artwork.save().then((doc) => {
+    response.send(doc);
+  }, (error) => {
+    console.log("Error", error)
+    response.status(400).send(error);
+  });
 });
 
 
@@ -170,6 +150,7 @@ app.get("/annotations/:id", (request, response) => {
 
 //POST annotation
 app.post("/annotations", (request, response) => {
+  console.log("POST annotation triggered")
   // console.log("Request at /annotations POST: ", request.body);
   let annotation = new Annotation({
     headline: request.body.headline,
@@ -182,11 +163,13 @@ app.post("/annotations", (request, response) => {
   });
   // console.log("Request at /annotations POST: ", request.body);
   // console.log(request.body);
+  console.log("Annotation content: ", annotation);
 
   annotation.save().then((doc) => {
-    // console.log("Doc has saved: ", doc)
+    console.log("Doc has saved: ", doc)
     response.send(doc);
   }, (error) => {
+    console.log("Error happened")
     response.status(400).send(error);
   });
 });
