@@ -104,32 +104,9 @@ app.post("/artwork", (request, response) => {
     century: request.body.century,
     culture: request.body.culture,
     url: request.body.url,
-    imageUrl: request.body.imageUrl,
-    apiId: request.body.apiId,
+    primaryimageurl: request.body.primaryimageurl,
+    id: request.body.id,
   });
-
-
-
-  // Artwork.findOne({ apiId: artwork.apiId })
-  //   .then(foundArtwork => {
-  //     if (!foundArtwork){
-  //       return artwork.save().then((doc) => {
-  //         response.send(doc);
-  //       }, (error) => {
-  //         response.status(400).send(error);
-  //       });
-  //     }
-  //     return foundArtwork;
-  //   })
-  //   .catch(console.error);
-
-
-    //trying find or create
-    // Artwork.findOneOrCreate(artwork).then((doc) => {
-    //   response.send(doc);
-    // }, (error) => {
-    //   response.status(400).send(error);
-    // });
 
     //save to DB or deny entry
     artwork.save().then((doc) => {

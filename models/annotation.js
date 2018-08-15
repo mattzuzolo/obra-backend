@@ -17,8 +17,6 @@ const AnnotationSchema = new Schema({
 });
 
 
-
-
 //Create model. First argument is singlular name for collection.
 const Annotation = mongoose.model("annotation", AnnotationSchema);
 

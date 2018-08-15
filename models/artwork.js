@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// const findOrCreate = require('mongoose-find-or-create')
 
 //establish schema
 const ArtworkSchema = new Schema({
@@ -10,9 +9,9 @@ const ArtworkSchema = new Schema({
   century: String,
   culture: String,
   url: String,
-  imageUrl: String,
-  apiId: {
-    type: String,
+  primaryimageurl: String,
+  id: {
+    type: Number,
     unique: true
   }
 });

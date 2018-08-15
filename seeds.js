@@ -15,8 +15,8 @@ let artworkExample = new Artwork({
   century: "20th Cenutry",
   culture: "American",
   url: "https://en.wikipedia.org/wiki/Nighthawks",
-  imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Nighthawks_by_Edward_Hopper_1942.jpg",
-  apiId: 568,
+  primaryimageurl: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Nighthawks_by_Edward_Hopper_1942.jpg",
+  id: 568,
 });
 
 Promise.all([
@@ -29,6 +29,8 @@ Promise.all([
     source: "SEED SOURCE",
     user: [userExample],
     artwork: [artworkExample],
+    xCoord: 626,
+    yCoord: 626,
   });
   annotationExample.save();
 }).then(console.log("Success"))
@@ -36,8 +38,8 @@ Promise.all([
 
 
   let userExampleTwo = new User({
-    username: "seedUsername",
-    password: "seedPassword",
+    username: "seedUsername2",
+    password: "seedPassword2",
   });
 
   let artworkExampleTwo = new Artwork({
@@ -47,8 +49,8 @@ Promise.all([
     century: "20th Cenutry",
     culture: "Spanish",
     url: "https://en.wikipedia.org/wiki/guernica",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Nighthawks_by_Edward_Hopper_1942.jpg",
-    apiId: 568,
+    primaryimageurl: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Nighthawks_by_Edward_Hopper_1942.jpg",
+    id: 725,
   });
 
   Promise.all([
@@ -61,6 +63,8 @@ Promise.all([
       source: "SEED SOURCE",
       user: [userExampleTwo],
       artwork: [artworkExampleTwo],
+      xCoord: 525,
+      yCoord: 525,
     });
     annotationExampleTwo.save();
   }).then(console.log("Success"))
