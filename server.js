@@ -4,6 +4,11 @@ let express = require("express");
 let bodyParser = require("body-parser");
 let cors = require("cors")
 let { ObjectID } = require("mongodb");
+let rest = require("restler");
+
+let fetch = require('node-fetch');
+
+
 
 //require local imports
 let { mongoose } = require("./db/mongoose");
@@ -74,6 +79,75 @@ app.get("/artwork", (request, response) => {
     response.status(400).send(error);
   });
 });
+
+
+app.get("/search/:frontEndQuery", (request, response) => {
+
+  let frontEndQuery = request.params.frontEndQuery
+
+  rest.get("https://api.harvardartmuseums.org/object", {
+    query: {
+          apikey: "0eec8470-9658-11e8-90a5-d90dedc085a2",
+          title: frontEndQuery,
+          classification: "Paintings",
+          fields: "objectnumber,title,dated,people,medium,century,culture,url,primaryimageurl,id",
+      }
+  }).on("complete", function(data, response) {
+
+      let filteredForImageArray = filterForImageLinkPresent(data.records);
+
+      let artworkArrayToFront = [];
+
+      filteredForImageArray.forEach( individualWork => {
+        Artwork.findOne({ id: individualWork.id }, function(error, artwork){
+          if (artwork){
+            artworkArrayToFront.push(artwork)
+            // console.log("\n\n\nartworkArrayToFront", artworkArrayToFront);
+          }
+          else {
+            let newArtwork = Artwork.create(individualWork)
+              .then(artwork => artworkArrayToFront.push(artwork))
+              // .then(() => console.log("\n\n\nartworkArrayToFront", artworkArrayToFront))
+          }
+        })
+        // console.log("\n\n\nartworkArrayToFront after loop", artworkArrayToFront);
+      })
+      // .then(() => console.log("artworkArrayToFront AFTER FIND OR CREATE", artworkArrayToFront))
+      console.log("artworkArrayToFront AFTER FIND OR CREATE", artworkArrayToFront)
+    })
+
+})
+
+let filterForImageLinkPresent = (data) => {
+  return data.filter(individualWork => individualWork.primaryimageurl !== undefined || individualWork.primaryimageurl !== null)
+}
+
+
+
+
+
+
+  //
+  // let fetchQuery = apiEndpointBaseURL + "?" + queryString
+  //
+  // console.log("url to fetch", fetchQuery)
+
+
+
+  // let apiEndpointBaseURL = "https://api.harvardartmuseums.org/object";
+  // let apiKey = "0eec8470-9658-11e8-90a5-d90dedc085a2"
+  // let frontEndQuery = request.params.frontEndQuery;
+  //
+  // let fetchString = apiEndpointBaseURL + "?apikey=" + apiKey + "&title" + frontEndQuery;
+  //
+  // // console.log("fetch string", fetchString)
+  // fetch(fetchString)
+  //     // .then(response => response.json())
+  //     .then(data => console.log("Harvard response data:", data))
+  //     .catch(error => console.log("HARVARD FETCH ERROR", error))
+// })
+
+
 //Get Artwork by id
 app.get("/artwork/:id", (request, response) => {
   let id = request.params.id;
@@ -209,6 +283,10 @@ app.delete("/annotations/:id", (request, response) => {
     response.status(400).send();
   });
 });
+
+//Fetch handling
+
+
 
 
 //Listen on the chosen port

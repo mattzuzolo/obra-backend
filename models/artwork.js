@@ -16,6 +16,13 @@ const ArtworkSchema = new Schema({
   }
 });
 
+ArtworkSchema.statics.findOneOrCreate = function findOneOrCreate(externalApiObject, callback) {
+
+    this.findOne(externalApiObject.id, (error, result) => {
+        return result ? callback(error, result) : this.create(externalApiObject, (error, result) => { return callback(error, result) })
+    })
+}
+
 const Artwork = mongoose.model("artwork", ArtworkSchema);
 
 module.exports = { Artwork };
