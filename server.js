@@ -21,7 +21,6 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(bodyParser.json());
 
-
 //Configure routes here:
 
 //GET Users
