@@ -5,6 +5,7 @@ let bodyParser = require("body-parser");
 let cors = require("cors")
 let { ObjectID } = require("mongodb");
 let rest = require("restler");
+let querystring = require('querystring');
 
 let fetch = require('node-fetch');
 
@@ -85,55 +86,79 @@ app.get("/search/:frontEndQuery", (request, response) => {
 
   let frontEndQuery = request.params.frontEndQuery
 
-  rest.get("https://api.harvardartmuseums.org/object", {
-    query: {
-          apikey: "0eec8470-9658-11e8-90a5-d90dedc085a2",
-          title: frontEndQuery,
-          classification: "Paintings",
-          fields: "objectnumber,title,dated,people,medium,century,culture,url,primaryimageurl,id",
-      }
-  }).on("complete", function(data, response) {
-      // console.log("HARVARD FETCH DATA: ", data)
+  let apiEndpointBaseURL = "https://api.harvardartmuseums.org/object";
+  let searchString = querystring.stringify({
+    apikey: "0eec8470-9658-11e8-90a5-d90dedc085a2",
+    title: frontEndQuery,
+    classification: "Paintings",
+    fields: "objectnumber,title,dated,people,medium,century,culture,url,primaryimageurl,id",
+  });
 
-      let filteredForImageArray = filterForImageLinkPresent(data.records);
+  fetch(`${apiEndpointBaseURL}?${searchString}`)
+    .then(response => response.json())
+    // .then(data => console.log("data", data.records))
+    .then(apiArtworkArray => filterForImageLinkPresent(apiArtworkArray.records))
+    // .then(apiArtworkArrayWithImages => apiArtworkArrayWithImages.map(individualWork => findOrCreate(individualWork)))
+    .then(apiArtworkArrayWithImages => console.log(findOne(apiArtworkArrayWithImages[0])))
 
-      return Promise
-        .all(filteredForImageArray.map((individualWork) => {
-          return findOrCreate(individualWork);
-        }))
-        .then(data => console.log("Success!!!", data))
-        .catch(error => console.log("ERROR: ", error))
-  })
+
+})
+
+// .then(apiArtworkArrayWithImages => {
+//   return Promise.all(apiArtworkArrayWithImages)
+//     .then( (artworkArray) => artworkArray.map( individualWork => findOrCreate(individualWork) ) )
+//     .then(data => console.log("MAP RESULT", data))
+// })
+
+  // fetch("")
+
+  // rest.get("https://api.harvardartmuseums.org/object", {
+  //   query: {
+  //         apikey: "0eec8470-9658-11e8-90a5-d90dedc085a2",
+  //         title: frontEndQuery,
+  //         classification: "Paintings",
+  //         fields: "objectnumber,title,dated,people,medium,century,culture,url,primaryimageurl,id",
+  //     }
+  // }).on("complete", function(data, response) {
+  //     // console.log("HARVARD FETCH DATA: ", data)
+  //
+  //     let filteredForImageArray = filterForImageLinkPresent(data.records);
+  //
+  //     return Promise
+  //       .all(filteredForImageArray.map((individualWork) => {
+  //         return findOrCreate(individualWork);
+  //       }))
+  //       .then(data => console.log("Success!!!", data))
+  //       .catch(error => console.log("ERROR: ", error))
+  // })
       // Promise.all(filteredForImageArray)
       //   .then((artworkArray) => artworkArray.map(async individualWork => {
-      //     return await findOrCreate(individualWork)
+      //     return findOrCreate(individualWork)
       //   }))
       //   .then(data => console.log("MAP RESULT", data))
 
 
 
-      // let artworkArrayToFront = (filteredForImageArray) => filteredForImageArray.map(async (individualWork) => {
-      //   let response = await findOrCreate(individualWork);
-      //   return response;
-      // })
-
-      // console.log("artworkArrayToFront", artworkArrayToFront)
-
-      // Promise.all(artworkArrayToFront)
-        // .then(data => console.log("Returned data!", data))
-
-
-      // .then(() => console.log("artworkArrayToFront AFTER FIND OR CREATE", artworkArrayToFront))
+    //   let artworkArrayToFront = (filteredForImageArray) => filteredForImageArray.map(async (individualWork) => {
+    //     let response = await findOrCreate(individualWork);
+    //     return response;
+    //   })
+    //
+    //   console.log("artworkArrayToFront", artworkArrayToFront)
+    //
+    //   Promise.all(artworkArrayToFront)
+    //     .then(data => console.log("Returned data!", data))
+    //
+    //
+    //   .then(() => console.log("artworkArrayToFront AFTER FIND OR CREATE", artworkArrayToFront))
     // })
-
-})
 
 let filterForImageLinkPresent = (data) => {
   return data.filter(individualWork => individualWork.primaryimageurl !== undefined || individualWork.primaryimageurl !== null)
 }
 
 let findOrCreate = (individualWork) => {
-  let resultArtwork = Artwork.findOne({ id: individualWork.id }, function(error, artwork){
+  Artwork.findOne({ id: individualWork.id }, function(error, artwork){
     if (artwork){
       console.log("FOUND:", artwork)
       return artwork;
@@ -145,6 +170,24 @@ let findOrCreate = (individualWork) => {
       // return newArtwork;
     }
   })
+
+}
+
+let findOne = (individualWork) => {
+  Artwork.findOne({ id: individualWork.id }, function(error, artwork){
+    return artwork;
+    // if (artwork){
+    //   console.log("FOUND:", artwork)
+    //   return artwork;
+    // }
+    // else {
+    //   return Artwork.create(individualWork)
+    //     .then(artwork => console.log("CREATED:", artwork))
+    //     .catch(error => console.log("ERROR: ", error))
+    //   // return newArtwork;
+    // }
+  })
+
 }
 
 
