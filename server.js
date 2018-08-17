@@ -93,28 +93,38 @@ app.get("/search/:frontEndQuery", (request, response) => {
           fields: "objectnumber,title,dated,people,medium,century,culture,url,primaryimageurl,id",
       }
   }).on("complete", function(data, response) {
+      // console.log("HARVARD FETCH DATA: ", data)
 
       let filteredForImageArray = filterForImageLinkPresent(data.records);
 
-      let artworkArrayToFront = [];
+      return Promise
+        .all(filteredForImageArray.map((individualWork) => {
+          return findOrCreate(individualWork);
+        }))
+        .then(data => console.log("Success!!!", data))
+        .catch(error => console.log("ERROR: ", error))
+  })
+      // Promise.all(filteredForImageArray)
+      //   .then((artworkArray) => artworkArray.map(async individualWork => {
+      //     return await findOrCreate(individualWork)
+      //   }))
+      //   .then(data => console.log("MAP RESULT", data))
 
-      filteredForImageArray.forEach( individualWork => {
-        Artwork.findOne({ id: individualWork.id }, function(error, artwork){
-          if (artwork){
-            artworkArrayToFront.push(artwork)
-            // console.log("\n\n\nartworkArrayToFront", artworkArrayToFront);
-          }
-          else {
-            let newArtwork = Artwork.create(individualWork)
-              .then(artwork => artworkArrayToFront.push(artwork))
-              // .then(() => console.log("\n\n\nartworkArrayToFront", artworkArrayToFront))
-          }
-        })
-        // console.log("\n\n\nartworkArrayToFront after loop", artworkArrayToFront);
-      })
+
+
+      // let artworkArrayToFront = (filteredForImageArray) => filteredForImageArray.map(async (individualWork) => {
+      //   let response = await findOrCreate(individualWork);
+      //   return response;
+      // })
+
+      // console.log("artworkArrayToFront", artworkArrayToFront)
+
+      // Promise.all(artworkArrayToFront)
+        // .then(data => console.log("Returned data!", data))
+
+
       // .then(() => console.log("artworkArrayToFront AFTER FIND OR CREATE", artworkArrayToFront))
-      console.log("artworkArrayToFront AFTER FIND OR CREATE", artworkArrayToFront)
-    })
+    // })
 
 })
 
@@ -122,7 +132,20 @@ let filterForImageLinkPresent = (data) => {
   return data.filter(individualWork => individualWork.primaryimageurl !== undefined || individualWork.primaryimageurl !== null)
 }
 
-
+let findOrCreate = (individualWork) => {
+  let resultArtwork = Artwork.findOne({ id: individualWork.id }, function(error, artwork){
+    if (artwork){
+      console.log("FOUND:", artwork)
+      return artwork;
+    }
+    else {
+      return Artwork.create(individualWork)
+        .then(artwork => console.log("CREATED:", artwork))
+        .catch(error => console.log("ERROR: ", error))
+      // return newArtwork;
+    }
+  })
+}
 
 
 
