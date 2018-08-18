@@ -121,6 +121,7 @@ app.post("/artwork", (request, response) => {
 //GET annotations
 app.get("/annotations", (request, response) => {
   //use find method to access all users
+
   Annotation.find({}).then((annotations) => {
     response.send({annotations});
   }, (error) => {
@@ -137,6 +138,20 @@ app.get("/annotations/:id", (request, response) => {
   }
 
   Annotation.findById(id).then((annotation) => {
+    if(!annotation){
+      return response.status(404).send();
+    }
+    response.send({annotation});
+  }).catch((error) => {
+    response.status(400).send();
+  });
+});
+
+//GET annotations by id
+app.get("/annotations-artwork", (request, response) => {
+  Annotation.find({})
+    .populate('artwork')
+    .then((annotation) => {
     if(!annotation){
       return response.status(404).send();
     }
