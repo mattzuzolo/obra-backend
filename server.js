@@ -184,7 +184,6 @@ app.put("/annotations/:id", (request, response) => {
   Annotation.findByIdAndUpdate(id, request.body, {new: true})
     .then((annotation) => {
       if (!annotation) {
-        console.log("Annotation doesn't exist")
         return response.status(404).send();
       }
       response.send({annotation})
