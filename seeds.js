@@ -4,7 +4,7 @@ const { Artwork } = require("./models/artwork");
 const { mongoose } = require("./db/mongoose");
 
 let userExample = new User({
-  username: "seedUsername",
+  email: "seedUsername@@email.comemail.com",
   password: "seedPassword",
 });
 
@@ -38,7 +38,7 @@ Promise.all([
 
 
   let userExampleTwo = new User({
-    username: "seedUsername2",
+    email: "seedUsername2@email.com",
     password: "seedPassword2",
   });
 

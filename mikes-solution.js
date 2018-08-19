@@ -59,7 +59,7 @@ app.get("/users/:id", (request, response) => {
 //POST Users
 app.post("/users", (request, response) => {
   let user = new User({
-    username: request.body.username,
+    email: request.body.email,
     password: request.body.password,
   })
   //save to DB or deny entry

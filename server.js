@@ -51,18 +51,18 @@ app.get("/users/:id", (request, response) => {
   });
 });
 //POST Users
-app.post("/users", (request, response) => {
-  let user = new User({
-    username: request.body.username,
-    password: request.body.password,
-  })
-  //save to DB or deny entry
-  user.save().then((doc) => {
-    response.send(doc);
-  }, (error) => {
-    response.status(400).send(error);
-  });
-});
+// app.post("/users", (request, response) => {
+//   let user = new User({
+//     username: request.body.username,
+//     password: request.body.password,
+//   })
+//   //save to DB or deny entry
+//   user.save().then((doc) => {
+//     response.send(doc);
+//   }, (error) => {
+//     response.status(400).send(error);
+//   });
+// });
 
 
 //GET Artwork
@@ -224,6 +224,21 @@ app.delete("/annotations/:id", (request, response) => {
   }).catch((error) => {
     response.status(400).send();
   });
+});
+
+//AUTHENTICATION STUFF HERE!!!
+//POST to /Users
+app.post("/users", (request, response) => {
+  let body = (({ email, password}) => ({ email, password }))(request.body);
+  let user = new User(body);
+  user.save()
+    .then((user) => {
+    response.send(user);
+    })
+    .catch((event) => {
+      response.status(400).send(event)
+    })
+
 });
 
 
