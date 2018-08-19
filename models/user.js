@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const validator = require("validator")
+const validator = require("validator");
+const jwt = require("jsonwebtoken");
 
 //establish schema
 const UserSchema = new Schema({
@@ -31,6 +32,30 @@ const UserSchema = new Schema({
     },
   }]
 });
+
+//modify JSON return only neccessary information
+UserSchema.methods.toJSON = function(){
+  let user = this;
+  let userObject = user.toObject(); //mongoose user variable and limiting properties avaialble
+  //only returns _id and email
+  return (({ _id, email }) => ({ _id, email }))(userObject);
+
+};
+
+//instance methods
+UserSchema.methods.generateAuthToken = function(){
+  let user = this;
+  let access = "auth";
+  let token = jwt.sign({_id: user._id.toHexString(), access}, "abc123").toString();
+
+  //Issues using .push() depending on mongo version
+  //will change to spread operator or other solution later
+  user.tokens = user.tokens.concat([{access,token}]);
+  return user.save()
+    .then(() => {
+      return token;
+    });
+};
 
 //Create model. First argument is singlular name for collection.
 const User = mongoose.model("user", UserSchema);

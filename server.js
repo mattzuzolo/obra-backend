@@ -1,9 +1,9 @@
 
 //require external libraries
-let express = require("express");
-let bodyParser = require("body-parser");
-let cors = require("cors")
-let { ObjectID } = require("mongodb");
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors")
+const { ObjectID } = require("mongodb");
 
 //require local imports
 let { mongoose } = require("./db/mongoose");
@@ -232,13 +232,13 @@ app.post("/users", (request, response) => {
   let body = (({ email, password}) => ({ email, password }))(request.body);
   let user = new User(body);
   user.save()
-    .then((user) => {
-    response.send(user);
-    })
-    .catch((event) => {
+    .then(() => {
+      return user.generateAuthToken();
+  }).then((token) => {
+    response.header("x-auth", token).send(user);
+  }).catch((event) => {
       response.status(400).send(event)
-    })
-
+  })
 });
 
 
