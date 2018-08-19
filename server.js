@@ -10,6 +10,7 @@ let { mongoose } = require("./db/mongoose");
 let { User } = require("./models/user");
 let { Annotation } = require("./models/annotation");
 let { Artwork } = require("./models/artwork");
+let { authenticate } = require("./middleware/authenticate");
 
 //Save express to app
 let app = express();
@@ -239,6 +240,10 @@ app.post("/users", (request, response) => {
   }).catch((event) => {
       response.status(400).send(event)
   })
+});
+
+app.get("/me", authenticate, (request, response) => {
+  response.send(request.user)
 });
 
 
