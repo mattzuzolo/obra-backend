@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs")
 
 //establish schema
 const UserSchema = new Schema({
@@ -75,6 +76,20 @@ UserSchema.statics.findByToken = function(token){
   });
 
 };
+
+UserSchema.pre("save", function(next){
+  let user = this;
+  if (user.isModified("password")){
+    bcrypt.genSalt(10, (error, salt) => {
+      bcrypt.hash(user.password, salt, (error, hash) => {
+        user.password = hash;
+        next();
+      });
+    })
+  } else {
+    next();
+  }
+});
 
 //Create model. First argument is singlular name for collection.
 const User = mongoose.model("user", UserSchema);
