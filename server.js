@@ -130,6 +130,17 @@ app.get("/annotations", (request, response) => {
   });
 });
 
+app.get("/me/annotations", authenticate, (request, response) => {
+  //use find method to access all users
+  Annotation.find({
+    user: request.user._id
+  }).then((annotations) => {
+    response.send({annotations});
+  }, (error) => {
+    response.status(400).send(error);
+  });
+});
+
 //GET annotations by id
 app.get("/annotations/:id", (request, response) => {
   let id = request.params.id;
@@ -163,7 +174,7 @@ app.get("/annotations-artwork", (request, response) => {
 });
 
 //POST annotation
-app.post("/annotations", (request, response) => {
+app.post("/annotations", authenticate, (request, response) => {
   // console.log("Request at /annotations POST: ", request.body);
   let annotation = new Annotation({
     headline: request.body.headline,
@@ -172,7 +183,8 @@ app.post("/annotations", (request, response) => {
     xCoord: request.body.xCoord,
     yCoord: request.body.yCoord,
     artwork: request.body.artwork,
-    user: request.body.user,
+    // user: request.body.user,
+    user: request.user._id,
   });
   // console.log("Request at /annotations POST: ", request.body);
   // console.log(request.body);
@@ -186,7 +198,7 @@ app.post("/annotations", (request, response) => {
 });
 //
 //UPDATE annotation
-app.put("/annotations/:id", (request, response) => {
+app.put("/annotations/:id", authenticate, (request, response) => {
   let id = request.params.id;
 
   //only allow user to pass specified keys
@@ -194,14 +206,17 @@ app.put("/annotations/:id", (request, response) => {
   let body = request.body;
 
   if (!ObjectID.isValid(id)){
+
     return response.status(404).send();
   }
 
-  Annotation.findByIdAndUpdate(id, request.body, {new: true})
+  Annotation.findOneAndUpdate({_id: id, user: request.user._id}, request.body, {new: true})
     .then((annotation) => {
       if (!annotation) {
+
         return response.status(404).send();
       }
+
       response.send({annotation})
 
     }).catch((error) => {
@@ -210,14 +225,17 @@ app.put("/annotations/:id", (request, response) => {
 });
 
 //DELETE annotation
-app.delete("/annotations/:id", (request, response) => {
+app.delete("/annotations/:id", authenticate, (request, response) => {
   let id = request.params.id;
 
   if (!ObjectID.isValid(id)){
     return response.status(404).send();
   }
 
-  Annotation.findByIdAndRemove(id).then((annotation) => {
+  Annotation.findOneAndRemove({
+    _id: id,
+    user: request.user._id,
+  }).then((annotation) => {
     if (!annotation){
       return response.status(404).send();
     }

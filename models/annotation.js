@@ -12,8 +12,16 @@ const AnnotationSchema = new Schema({
   source: String,
   xCoord: Number,
   yCoord: Number,
-  user: [{type: Schema.Types.ObjectId, ref: 'user'}], //must reference entire collection as listed in respective schema
-  artwork: [{type: Schema.Types.ObjectId, ref: 'artwork'}],
+  user: [{
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+    required: true
+  }], //must reference entire collection as listed in respective schema
+  artwork: [{
+    type: Schema.Types.ObjectId,
+    ref: 'artwork',
+    required: true
+  }],
 });
 
 
