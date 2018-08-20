@@ -16,12 +16,23 @@ let { authenticate } = require("./middleware/authenticate");
 //Save express to app
 let app = express();
 
+let corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200,
+  exposedHeaders: ["x-auth"]
+}
+
+
+
 //Assign port. Default to Heroku config or run 4000 locally
 const PORT = process.env.PORT || 4000;
 
 //configure middleware:
 app.use(cors());
 app.use(bodyParser.json());
+
+//Enable pre-flight for routes
+// app.options('*', cors());
 
 //Configure routes here:
 
@@ -249,19 +260,20 @@ app.delete("/annotations/:id", authenticate, (request, response) => {
 //AUTHENTICATION STUFF HERE!!!
 //POST to /Users
 app.post("/users", (request, response) => {
-  console.log("INSIDER /users")
+
   let body = (({ email, password }) => ({ email, password }))(request.body);
-  console.log("/users body:", body)
+
   let user = new User(body);
-  console.log("new user", user)
+
   user.save()
     .then(() => {
-      console.log("about to generate auth")
+
       return user.generateAuthToken();
   }).then((token) => {
     response.header("x-auth", token).send(user);
+
   }).catch((event) => {
-    console.log("catch in /users POST")
+
     response.status(400).send(event)
   })
 });
@@ -271,16 +283,17 @@ app.get("/users/me", authenticate, (request, response) => {
   response.send(request.user)
 });
 
-
 //Login user
-app.post("/users/login", (request, response) => {
+app.post("/users/login", cors(corsOptions), (request, response) => {
   let body = (({ email, password }) => ({ email, password }))(request.body);
 
   User.findByCredentials(body.email, body.password)
     .then((user) => {
       return user.generateAuthToken().then((token) => {
-        console.log("ABOUT TO SEND TOKEN", token)
-        response.header("x-auth", token).send(user);
+        let userWithToken = Object.assign({}, user, {"token": token})
+        console.log("ABOUT TO SEND userWithToken", userWithToken)
+        // response.header("x-auth", token).send(user);
+        response.send(userWithToken)
       });
     }).catch((error) => {
       response.status(400).send();

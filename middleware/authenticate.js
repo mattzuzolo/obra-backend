@@ -5,7 +5,6 @@ let authenticate = (request, response, next) => {
 
   User.findByToken(token).then((user) => {
     if (!user){
-      console.log("USER DOESNT EXIST")
       return Promise.reject(); //send to catch for 401
     }
     request.user = user;

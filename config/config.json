@@ -1,7 +1,7 @@
 {
   "test": {
     "PORT": 4000,
-    "MONGODB_URI": "mongodb://testz:test1234@ds215822.mlab.com:15822/obra",
+    "MONGODB_URI": "mongodb://localhost:27017/obra",
     "JWT_SECRET": "oasfb34123oncoxansodva3251315"
 
   },
