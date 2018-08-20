@@ -48,14 +48,14 @@ UserSchema.methods.generateAuthToken = function(){
   console.log("INSIDER GENERATE AUTH METHOD")
   let user = this;
   let access = "auth";
-  let token = jwt.sign({_id: user._id.toHexString(), access}, "abc123").toString();
+  let token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString();
 
   //Issues using .push() depending on mongo version
   //will change to spread operator or other solution later
   user.tokens = user.tokens.concat([{access,token}]);
   return user.save()
     .then(() => {
-      console.log("RETURN TOKEN HERE", token)
+      console.log("RETURN TOKEN HERE")
 
       return token;
     });
@@ -76,7 +76,7 @@ UserSchema.statics.findByToken = function(token){
   let decoded;
 
   try {
-    decoded = jwt.verify(token, "abc123")
+    decoded = jwt.verify(token, process.env.JWT_SECRET)
   } catch(error){
     return Promise.reject();
   }

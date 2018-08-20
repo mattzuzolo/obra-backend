@@ -1,3 +1,4 @@
+require('./config/config');
 
 //require external libraries
 const express = require("express");
