@@ -45,6 +45,7 @@ UserSchema.methods.toJSON = function(){
 
 //instance methods
 UserSchema.methods.generateAuthToken = function(){
+  console.log("INSIDER GENERATE AUTH METHOD")
   let user = this;
   let access = "auth";
   let token = jwt.sign({_id: user._id.toHexString(), access}, "abc123").toString();
@@ -54,8 +55,19 @@ UserSchema.methods.generateAuthToken = function(){
   user.tokens = user.tokens.concat([{access,token}]);
   return user.save()
     .then(() => {
+      console.log("RETURN TOKEN HERE", token)
+
       return token;
     });
+};
+
+UserSchema.methods.removeToken = function(token){
+  let user = this;
+  return user.update({
+    $pull: {
+      tokens: {token}
+    }
+  })
 };
 
 //Model methods

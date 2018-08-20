@@ -230,21 +230,30 @@ app.delete("/annotations/:id", (request, response) => {
 //AUTHENTICATION STUFF HERE!!!
 //POST to /Users
 app.post("/users", (request, response) => {
+  console.log("INSIDER /users")
   let body = (({ email, password }) => ({ email, password }))(request.body);
+  console.log("/users body:", body)
   let user = new User(body);
+  console.log("new user", user)
   user.save()
     .then(() => {
+      console.log("about to generate auth")
       return user.generateAuthToken();
   }).then((token) => {
+    response.header("x-auth", token).send(user);
   }).catch((event) => {
-      response.status(400).send(event)
+    console.log("catch in /users POST")
+    response.status(400).send(event)
   })
 });
 
-app.get("/me", authenticate, (request, response) => {
+
+app.get("/users/me", authenticate, (request, response) => {
   response.send(request.user)
 });
 
+
+//Login user
 app.post("/users/login", (request, response) => {
   let body = (({ email, password }) => ({ email, password }))(request.body);
 
@@ -257,6 +266,16 @@ app.post("/users/login", (request, response) => {
       response.status(400).send();
     });
 })
+
+//Logout user
+app.delete("/users/me/token", authenticate, (request, response) => {
+  request.user.removeToken(request.token)
+    .then(() => {
+      response.status(200).send();
+    }), () => {
+      response.status(400).send();
+    }
+});
 
 
 //Listen on the chosen port
