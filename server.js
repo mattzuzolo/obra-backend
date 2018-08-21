@@ -190,7 +190,7 @@ app.get("/annotations-artwork", (request, response) => {
     response.status(400).send();
   });
 });
-
+//comment
 //POST annotation
 app.post("/annotations", authenticate, (request, response) => {
   // console.log("Request at /annotations POST: ", request.body);
