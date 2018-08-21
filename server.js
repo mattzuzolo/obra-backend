@@ -62,10 +62,8 @@ app.get("/current", (request, response) => {
 
   User.findByToken(token).then((user) => {
     if(!user){
-      console.log("___USER NOT FOUND____")
       return response.status(404).send();
     }
-    console.log("FOUND USER", user)
     response.send({user});
   }).catch((error) => {
     // response.status(400).send();
@@ -203,16 +201,20 @@ app.post("/annotations", authenticate, (request, response) => {
     xCoord: request.body.xCoord,
     yCoord: request.body.yCoord,
     artwork: request.body.artwork,
-    // user: request.body.user,
-    user: request.user._id,
+    user: request.body.user,
+    // user: request.user._id,
   });
+
+  console.log("NEW ANNOTATION IN /POST", annotation)
   // console.log("Request at /annotations POST: ", request.body);
   // console.log(request.body);
 
   annotation.save().then((doc) => {
-    // console.log("Doc has saved: ", doc)
+    console.log("Doc has saved: ", doc)
     response.send(doc);
+    console.log("RESPONSE HAS SENT")
   }, (error) => {
+    console.log("ERROR in /POST annotation")
     response.status(400).send(error);
   });
 });
