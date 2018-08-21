@@ -16,23 +16,12 @@ let { authenticate } = require("./middleware/authenticate");
 //Save express to app
 let app = express();
 
-let corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200,
-  exposedHeaders: ["x-auth"]
-}
-
-
-
 //Assign port. Default to Heroku config or run 4000 locally
 const PORT = process.env.PORT || 4000;
 
 //configure middleware:
 app.use(cors());
 app.use(bodyParser.json());
-
-//Enable pre-flight for routes
-// app.options('*', cors());
 
 //Configure routes here:
 
@@ -61,6 +50,25 @@ app.get("/users/:id", (request, response) => {
     response.send({user});
   }).catch((error) => {
     response.status(400).send();
+  });
+});
+
+app.get("/current", (request, response) => {
+  let token = request.get("x-auth")
+  //
+  // if (!ObjectID.isValid(id)){
+  //   return response.status(404).send();
+  // }
+
+  User.findByToken(token).then((user) => {
+    if(!user){
+      console.log("___USER NOT FOUND____")
+      return response.status(404).send();
+    }
+    console.log("FOUND USER", user)
+    response.send({user});
+  }).catch((error) => {
+    // response.status(400).send();
   });
 });
 //POST Users
@@ -284,14 +292,14 @@ app.get("/users/me", authenticate, (request, response) => {
 });
 
 //Login user
-app.post("/users/login", cors(corsOptions), (request, response) => {
+app.post("/users/login", (request, response) => {
   let body = (({ email, password }) => ({ email, password }))(request.body);
 
   User.findByCredentials(body.email, body.password)
     .then((user) => {
       return user.generateAuthToken().then((token) => {
         let userWithToken = Object.assign({}, user, {"token": token})
-        console.log("ABOUT TO SEND userWithToken", userWithToken)
+        // console.log("ABOUT TO SEND userWithToken", userWithToken)
         // response.header("x-auth", token).send(user);
         response.send(userWithToken)
       });
@@ -309,6 +317,8 @@ app.delete("/users/me/token", authenticate, (request, response) => {
       response.status(400).send();
     }
 });
+
+
 
 
 //Listen on the chosen port
