@@ -259,6 +259,7 @@ app.delete("/annotations/:id", authenticate, (request, response) => {
     user: request.user._id,
   }).then((annotation) => {
     if (!annotation){
+
       return response.status(404).send();
     }
     response.send(annotation);
