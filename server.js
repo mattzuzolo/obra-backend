@@ -152,7 +152,10 @@ app.get("/me/annotations", authenticate, (request, response) => {
   //use find method to access all users
   Annotation.find({
     user: request.user._id
-  }).then((annotations) => {
+  })
+  .populate("artwork")
+  .populate("user")
+  .then((annotations) => {
     response.send({annotations});
   }, (error) => {
     response.status(400).send(error);
@@ -177,10 +180,10 @@ app.get("/annotations/:id", (request, response) => {
   });
 });
 
-//GET annotations by id
+//GET annotations by with artwork object
 app.get("/annotations-artwork", (request, response) => {
   Annotation.find({})
-    .populate('artwork')
+    .populate("artwork")
     .then((annotation) => {
     if(!annotation){
       return response.status(404).send();
@@ -190,7 +193,22 @@ app.get("/annotations-artwork", (request, response) => {
     response.status(400).send();
   });
 });
-//comment
+
+//GET annotations by with artwork object
+app.get("/annotations-user", (request, response) => {
+  Annotation.find({})
+    .populate("user")
+    .then((annotation) => {
+    if(!annotation){
+      return response.status(404).send();
+    }
+    response.send({annotation});
+  }).catch((error) => {
+    response.status(400).send();
+  });
+});
+
+
 //POST annotation
 app.post("/annotations", authenticate, (request, response) => {
   // console.log("Request at /annotations POST: ", request.body);
