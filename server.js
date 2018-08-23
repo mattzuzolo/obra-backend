@@ -223,16 +223,12 @@ app.post("/annotations", authenticate, (request, response) => {
     // user: request.user._id,
   });
 
-  console.log("NEW ANNOTATION IN /POST", annotation)
   // console.log("Request at /annotations POST: ", request.body);
   // console.log(request.body);
 
   annotation.save().then((doc) => {
-    console.log("Doc has saved: ", doc)
     response.send(doc);
-    console.log("RESPONSE HAS SENT")
   }, (error) => {
-    console.log("ERROR in /POST annotation")
     response.status(400).send(error);
   });
 });
@@ -242,8 +238,6 @@ app.put("/annotations/:id", authenticate, (request, response) => {
   let id = request.params.id; //annotation id
   let body = request.body;
 
-  console.log("ANNOTATION ID TO FIND:", id);
-  console.log("USER TO FIND:", request.user._id)
 
   if (!ObjectID.isValid(id)){
     return response.status(404).send();
@@ -251,17 +245,13 @@ app.put("/annotations/:id", authenticate, (request, response) => {
 
   Annotation.findOneAndUpdate({_id: id}, request.body, {new: true})
     .then((annotation) => {
-      console.log("ANNOTATION IN THEN STATEMENT")
       if (!annotation) {
-        console.log("annotation not found")
         return response.status(404).send();
       }
-      console.log("About to send")
 
       response.send({annotation})
 
     }).catch((error) => {
-      console.log("In found one and update catch")
       response.send(400).send();
     })
 });
