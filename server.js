@@ -239,30 +239,40 @@ app.post("/annotations", authenticate, (request, response) => {
 //
 //UPDATE annotation
 app.put("/annotations/:id", authenticate, (request, response) => {
-  let id = request.params.id;
-
-  //only allow user to pass specified keys
-  // let body = (({ headline, content, source}) => ({ headline, content, source }))(request.body);
+  let id = request.params.id; //annotation id
   let body = request.body;
 
-  if (!ObjectID.isValid(id)){
+  console.log("ANNOTATION ID TO FIND:", id);
+  console.log("USER TO FIND:", request.user._id)
 
+  if (!ObjectID.isValid(id)){
     return response.status(404).send();
   }
 
-  Annotation.findOneAndUpdate({_id: id, user: request.user._id}, request.body, {new: true})
+  Annotation.findOneAndUpdate({_id: id}, request.body, {new: true})
     .then((annotation) => {
+      console.log("ANNOTATION IN THEN STATEMENT")
       if (!annotation) {
-
+        console.log("annotation not found")
         return response.status(404).send();
       }
+      console.log("About to send")
 
       response.send({annotation})
 
     }).catch((error) => {
+      console.log("In found one and update catch")
       response.send(400).send();
     })
 });
+
+
+
+
+
+
+
+
 
 //DELETE annotation
 app.delete("/annotations/:id", authenticate, (request, response) => {
