@@ -161,7 +161,7 @@ app.get("/me/annotations", authenticate, (request, response) => {
     response.status(400).send(error);
   });
 });
-
+//comment
 //GET annotations by id
 app.get("/annotations/:id", (request, response) => {
   let id = request.params.id;
