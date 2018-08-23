@@ -147,7 +147,7 @@ app.get("/annotations", (request, response) => {
     response.status(400).send(error);
   });
 });
-
+ //
 app.get("/me/annotations", authenticate, (request, response) => {
   //use find method to access all users
   Annotation.find({
